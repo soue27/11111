@@ -19,7 +19,6 @@ def search_by_contract(base_name: str, contract: str):
     # Функция поиска по лицевому счету
     connect = sqlite3.connect(base_name)
     cursor = connect.cursor()
-    symbol = contract
     results = cursor.execute(f"SELECT * FROM dis WHERE contract LIKE '%{contract}%'").fetchall()
     connect.commit()
     connect.close()
@@ -37,13 +36,15 @@ def search_by_counterparty(base_name: str, counterparty: str):
 
 
 def search_by_address(base_name: str, address: list):
-    # Функция поиска по адресу, как полному так и неполному. В случае неполного адреса выдаются выборка подпадающие под условия
+    # Функция поиска по адресу, как полному так и неполному.
+    # В случае неполного адреса выдаются выборка подпадающие под условия
     connect = sqlite3.connect(base_name)
     cursor = connect.cursor()
     for i in range(len(address)):   # Цикл проверяет, что в адресе есть символы и заменяет их пустой строкой
         if not address[i].isalnum():
             address[i] = ''
-    results = cursor.execute(f"SELECT * FROM dis WHERE (city like '%{address[0]}%' or point like '%{address[0]}%') and street like '%{address[1]}%' and house like '%{address[2]}%'").fetchall()
+    results = cursor.execute(f"SELECT * FROM dis WHERE (city like '%{address[0]}%' or point like '%{address[0]}%') "
+                             f"and street like '%{address[1]}%' and house like '%{address[2]}%'").fetchall()
     connect.commit()
     connect.close()
     return results
@@ -59,9 +60,20 @@ def search_by_tp(base_name: str, tp: str):
     return results
 
 
-def add_to_bd(base_name: str, dis: list):
-    pass
+def add_to_bd(base_name: str, newdis: list):
+    for i in range(len(newdis)):
+        newdis[i] = newdis[i].lower()
+    connect = sqlite3.connect(base_name)
+    cursor = connect.cursor()
+    cursor.execute("INSERT INTO dis VALUES (?, ?, ?, ?, ?, ?, ?);",
+                   (newdis[0], newdis[1], newdis[2], newdis[2], newdis[3], newdis[4], newdis[5]))
+    connect.commit()
+    connect.close()
 
 
-def delete_from_bd(base_name: str, contract: str):
-    pass
+def delete_from_bd(base_name: str, cont: str):
+    connect = sqlite3.connect(base_name)
+    cursor = connect.cursor()
+    cursor.execute(f"DELETE from dis where contract LIKE '%{cont}%'")
+    connect.commit()
+    connect.close()

@@ -43,6 +43,7 @@ for i in range(1, sheet.nrows-1):
 # for result in my_db.search_by_tp('disabled.sqlite3', qw):
 #     print(result)
 
-adres = input().split()
-for result in my_db.search_by_address('disabled.sqlite3', adres):
-    print(result)
+# new = input().split(",")
+# my_db.add_to_bd('disabled.sqlite3', new)
+
+my_db.delete_from_bd('disabled.sqlite3', input('Введите номер лицевого счета'))
