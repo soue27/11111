@@ -1,27 +1,26 @@
-import os
-import sqlite3
 import xlrd
+import my_db
 
-#договор, контрагент, город ту, нас. пункт ту, улица ту, дом ту, тп
+# договор, контрагент, город ту, нас. пункт ту, улица ту, дом ту, тп
 table = [0, 0, 0, 0, 0, 0, 0]
 stroka = []
 spisok = []
-book = xlrd.open_workbook("C:\My_project\Test\Ограниченные ЧуЭС.xls")
+book = xlrd.open_workbook("Ограниченные ЧуЭС.xls")
 sheet = book.sheet_by_index(0)
 for i in range(sheet.ncols):
     if sheet.cell(0, i).value.lower() == 'договор':
         table[0] = i
-    if sheet.cell(0, i).value.lower() == 'контрагент':
+    elif sheet.cell(0, i).value.lower() == 'контрагент':
         table[1] = i
-    if sheet.cell(0, i).value.lower() == 'город ту':
+    elif sheet.cell(0, i).value.lower() == 'город ту':
         table[2] = i
-    if sheet.cell(0, i).value.lower() == 'нас. пункт ту':
+    elif sheet.cell(0, i).value.lower() == 'нас. пункт ту':
         table[3] = i
-    if sheet.cell(0, i).value.lower() == 'улица ту':
+    elif sheet.cell(0, i).value.lower() == 'улица ту':
         table[4] = i
-    if sheet.cell(0, i).value.lower() == 'дом ту':
+    elif sheet.cell(0, i).value.lower() == 'дом ту':
         table[5] = i
-    if sheet.cell(0, i).value.lower() == 'тп':
+    elif sheet.cell(0, i).value.lower() == 'тп':
         table[6] = i
 
 for i in range(1, sheet.nrows-1):
@@ -31,19 +30,19 @@ for i in range(1, sheet.nrows-1):
     spisok.append(korteg)
     stroka = []
 
-prj_dir = os.path.abspath(os.path.curdir)
+# my_db.create_db('disabled.sqlite3', spisok)
+# qw = input('введите лицевой счет')
+# for result in my_db.search_by_contract('disabled.sqlite3', qw):
+#     print(result)
+#
+# qw = input('введите фамилию')
+# for result in my_db.search_by_counterparty('disabled.sqlite3', qw):
+#     print(result)
+#
+# qw = input('введите номер ТП')
+# for result in my_db.search_by_tp('disabled.sqlite3', qw):
+#     print(result)
 
-a = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-base_name = 'disabled.sqlite3'
-connect = sqlite3.connect(prj_dir + '/' + base_name)
-cursor = connect.cursor()
-cursor.execute('CREATE TABLE IF NOT EXISTS dis (contract, counterparty, city, point, street, house, tp)')
-sqlite_insert_query = """INSERT INTO dis
-                                 (contract, counterparty, city, point, street, house, tp)
-                                 VALUES (?, ?, ?, ?, ?, ?, ?);"""
-cursor.executemany(sqlite_insert_query, spisok)
-connect.commit()
-connect.close()
-
-
+adres = input().split()
+for result in my_db.search_by_address('disabled.sqlite3', adres):
+    print(result)
