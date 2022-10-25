@@ -7,6 +7,7 @@ if not os.path.isfile('disabled.sqlite3'):
     my_db.create_db('disabled.sqlite3', spisok)
 else:
     print('файл уже есть')
+
 #
 # qw = input('введите лицевой счет')
 # for result in my_db.search_by_contract('disabled.sqlite3', qw):
