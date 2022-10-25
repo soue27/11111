@@ -45,7 +45,6 @@ def search_by_counterparty(cursor, base_name: str, counterparty: str):
     # connect.close()
     return results
 
-
 @openclose_db
 def search_by_address(cursor, base_name: str, address: list):
     # Функция поиска по адресу, как полному так и неполному.
